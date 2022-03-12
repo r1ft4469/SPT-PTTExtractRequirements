@@ -1,0 +1,9 @@
+{
+	"name": "PTTExtractRequirements",
+	"author": "r1fT",
+	"version": "1.0.0",
+	"akiVersion": "2.2.*",
+	"license": "NCSA Open Source",
+	"dependencies": {},
+	"main": "package.js"
+}
