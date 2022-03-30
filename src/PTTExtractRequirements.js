@@ -17,6 +17,10 @@ class PTTExtractRequirements {
         }
 
         const pttconfig = PathToTarkovAPI.getConfig();
+        if (!pttconfig.bypass_exfils_override) {
+            pttconfig.bypass_exfils_override = true;
+            Logger.log(`[${modName} : ${version}] : Updated PTT CONFIG Restart Server`);
+        }
 
         Logger.log(`[${modName} : ${version}] : Updating Locations in Database.`);
         for (let l in locations) {
@@ -29,24 +33,21 @@ class PTTExtractRequirements {
                         modExtract(l, exit, 0, 0, true, false);
                     }
 
-                    let ExtractType = locations[l].base.exits[exit].PassageRequirement
+		            let ExtractType = locations[l].base.exits[exit].PassageRequirement
                     let ExtractEnabled = false
-                    if (l == 'laboratory') {
-                        modExtract(l, exit, 100, 10, false, true, locations[l].base.exits[exit].EntryPoints);
-                        continue;
-                    }
 
-                    if (!ExtractEnabled) {
-                        for (let map in pttconfig.exfiltrations) {
-                            if (map != l) {
+                    for (let map in pttconfig.exfiltrations) {
+                        if (map != l) {
+                            continue;
+                        }
+
+                        for (let testexit in pttconfig.exfiltrations[map])
+                        {
+                            if (testexit != locations[l].base.exits[exit].Name) {
                                 continue;
                             }
-                            for (let testexit in pttconfig.exfiltrations[map])
-                            {
-                                if (testexit == locations[l].base.exits[exit].Name) {
-                                    ExtractEnabled = true;
-                                }
-                            }
+
+                            ExtractEnabled = true;
                         }
                     }
 
@@ -99,6 +100,10 @@ class PTTExtractRequirements {
             locations[l].base.exits[exit].Id = "";
             locations[l].base.exits[exit].Count = "0";
             locations[l].base.exits[exit].EntryPoints = entry;
+            if (locations[l].base.exits[exit].PassageRequirement == "TransferItem") {
+                locations[l].base.exits[exit].Id = "5449016a4bdc2d6f028b456f";
+                locations[l].base.exits[exit].Count = "5000";
+            }
             if (req) {
                 locations[l].base.exits[exit].PassageRequirement = "None";
                 locations[l].base.exits[exit].ExfiltrationType = "Individual";
