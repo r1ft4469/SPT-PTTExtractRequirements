@@ -79,9 +79,9 @@ class PTTExtractRequirements {
                         if (true && ExtractType === "ScavCooperation") {
                             modExtract(l, exit, 100, 10, true, true, entrypoints);
                         } else if (true && ExtractType === "TransferItem") {
-                            modExtract(l, exit, 100, 10, false, true, entrypoints);
+                            modExtract(l, exit, 100, 10, true, true, entrypoints);
                         } else if (true && ExtractType === "Empty" && locations[l].base.exits[exit].RequiredSlot === "Backpack") {
-                            modExtract(l, exit, 100, 10, false, true, entrypoints);
+                            modExtract(l, exit, 100, 10, true, true, entrypoints);
                         } else if (true && ExtractType === "Reference" && locations[l].base.exits[exit].Id === "Alpinist") {
                             modExtract(l, exit, 100, 10, false, true, entrypoints);
                         }
@@ -95,22 +95,15 @@ class PTTExtractRequirements {
 
         function modExtract(l, exit, chance, exfilTime, req, log, entry) {
             locations[l].base.exits[exit].Chance = chance;
-            locations[l].base.exits[exit].PlayersCount = "0";
-            locations[l].base.exits[exit].ExfiltrationTime = exfilTime;
-            locations[l].base.exits[exit].Id = "";
-            locations[l].base.exits[exit].Count = "0";
             locations[l].base.exits[exit].EntryPoints = entry;
-            if (locations[l].base.exits[exit].PassageRequirement == "TransferItem") {
-                locations[l].base.exits[exit].Id = "5449016a4bdc2d6f028b456f";
-                locations[l].base.exits[exit].Count = "5000";
-            }
+            locations[l].base.exits[exit].ExfiltrationTime = exfilTime;
             if (req) {
                 locations[l].base.exits[exit].PassageRequirement = "None";
                 locations[l].base.exits[exit].ExfiltrationType = "Individual";
                 locations[l].base.exits[exit].RequirementTip = "";
             }
             if (log) {
-                Logger.log(`[${modName} : ${version}] : ${l} : ${locations[l].base.exits[exit].Name}`, "green");
+                Logger.log(`[${modName} : ${version}] : ${l} : ${locations[l].base.exits[exit].Name} : ${locations[l].base.exits[exit].PassageRequirement}`, "green");
             }
         }
     }
